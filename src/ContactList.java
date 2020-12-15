@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import ContactList.ContactNode;
-
 public class ContactList {
     private static int hashTableSize = 3; // initial size of table
     private static ContactNode[] hashTable; // hash table
@@ -136,7 +134,9 @@ public class ContactList {
  		String str = nameORnumber;
  		
  		ContactNode<String, Contact> current;
- 		ContactNode<String, Contact> prev;
+ 		
+ 		//prev doesn't exist yet so its null
+ 		ContactNode<String, Contact> prev = null;
 
  		// calling the hashvalue(str) to get a possible value
  		int possibleIndex = hashValue(str);
@@ -154,16 +154,28 @@ public class ContactList {
  			
  			while (current != null) 
  			{
- 				if (hashTable[possibleIndex].key == str) 
- 				{
+ 				if (current.key.equals(str)) 
+ 				{	
  					
  					
- 			
- 					//to look for other contact Node should come first
- 					prev = current;
+ 					//we don't want to loose the rest of the chain
+ 					if( prev == null )
+ 					{
+ 						hashTable[possibleIndex] = current.next;
+ 					}
+ 					else
+ 					{
+ 						
+ 						//if it is the third one A B C and you decide you need to delete B
+ 						// You need to set prev which is A to C because current is B. 
+ 						//So B is gone. and the chain is still fixed to the right position.
+ 						prev.next = current.next;
+ 							
+ 					}
  					
  					//decrease numContacts in the LinkedList
  					numContacts--;
+ 					numContactNodes--;
  					
  					//look for the other contactNode with same object
  					
@@ -173,16 +185,24 @@ public class ContactList {
  						delete(current.contact.getName());
  						
  					}
+ 					else
+ 					{
+ 						delete(current.contact.getNumber());
+ 					}
  					
  					return true;
- 				} 
- 				
+ 					
+ 					
+ 				}	
+ 				//to look for other contact Node should come first
+				prev = current;
+			
  				current = current.next;
+ 				
  			}//endofwhile
 
  		}
- 		// update numContacts;
- 		numContacts--;
+ 		
 
  		return false;
  	}
@@ -198,7 +218,9 @@ public class ContactList {
  		// look for possible index?
  		int possibleIndex = hashValue(nameORnumber);
  		
+ 		
  		// Isn't hashTable[possibleIndex].key an object not a string so how would this
+ 		
  		// nothing in array empty
  		if (hashTable[possibleIndex] == null)// for possible linked list that we wont be able to look inside of until
  		{
@@ -214,12 +236,13 @@ public class ContactList {
 
  			while (current != null) 
  			{
- 				if (hashTable[possibleIndex].key == str) 
+ 				if (current.key.equals(str)) 
  				{
 
  					return str + " is in contact list";
 
  				}
+ 				
  				
  				current = current.next;
  				
@@ -293,5 +316,137 @@ public class ContactList {
         }
         return true;
     }
+    
+    
+    
+    
+    
+    public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+
+		System.out.println(" This part 2 ");
+		//ContactList 
+		
+		ContactList list1 = new ContactList();
+		
+		list1.insert("June","510-134-045");
+		list1.insert("Lily","510-336-911");
+		list1.insert("Leo","510-921-831");
+		list1.insert("Andrew","512-114-415");
+		list1.insert("Benjamin","520-994-085");
+		list1.insert("Jacob","750-131-041");
+		list1.insert("Lucas","750-211-911");
+		list1.insert("Bryan","402-111-931");
+		list1.insert("Andy","402-994-121");
+		list1.insert("Barbara","520-994-085");
+		
+		System.out.println(" ");
+
+		System.out.println("This is the number of Contact Nodes: ");
+		list1.numContactNodes();
+		
+		System.out.println(" ");
+		
+		System.out.println("Number of Contacts: ");
+		list1.numContacts();
+		
+		System.out.println(" ");
+		
+		System.out.println("Delete 510-921-831");
+		list1.delete("510-921-831");
+		
+		
+		System.out.println(" ");
+
+		
+		System.out.println("Number of Contact Nodes: ");
+		list1.numContactNodes();
+		
+		
+		System.out.println(" ");
+
+		
+		System.out.println("Number of Contacts: ");
+		list1.numContacts();
+		System.out.println(" ");
+		
+		
+		
+		System.out.println("Delete 510-921-831");
+		list1.delete("510-921-831");
+		
+		
+		
+		System.out.println("Number of Contact Nodes: ");
+		list1.numContactNodes();
+		
+		
+		System.out.println(" ");
+
+		
+		System.out.println("Number of Contacts: ");
+		list1.numContacts();
+		
+		/////////////////////////////////////////Find Method
+		
+		System.out.println(" ");
+		System.out.println("Find..... ");
+
+		
+		System.out.println("Find George: ");
+		list1.find("Benjamin");
+		
+
+		//////////////////////////////////////////////////
+		
+		System.out.println("Search All Contacts Method: ");
+		
+		System.out.println(" ");
+		System.out.println("Searching for 402");
+		
+		list1.searchAllContacts("402");
+		
+		
+		
+		System.out.println(" ");
+		System.out.println("Searching for all contacts thats start with 'L' :");
+		
+		list1.searchAllContacts("L");
+		
+		
+		//////////////////////////////////////////////
+		
+		System.out.println(" ");
+		System.out.println("Deleting..... ");
+		
+		list1.delete("Benjamin");
+		list1.delete("June");
+		list1.delete("Lily");
+		
+		///////////////////Delete a contact that has already been deleted: 
+		System.out.println(" We've deleted Lily but this is a double check: ");
+
+		list1.delete("Lily");
+		
+		///////////////////
+		System.out.println("Deleting...... ");
+
+		list1.delete("Jacob");
+		
+		System.out.println(" ");
+
+		list1.delete("520-994-085");
+		System.out.println(" ");
+
+		list1.delete("402-111-931");
+		System.out.println(" ");
+
+		list1.delete("402-994-121");
+		
+
+		
+
+}
 }
 
