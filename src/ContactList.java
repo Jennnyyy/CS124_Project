@@ -2,7 +2,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ContactList.ContactNode;
 
 public class ContactList {
     private static int hashTableSize = 5; // initial size of table
