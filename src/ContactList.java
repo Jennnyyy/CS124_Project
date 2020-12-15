@@ -116,7 +116,7 @@ public class ContactList {
  		String str = nameORnumber;
  		
  		ContactNode<String, Contact> current;
- 		ContactNode<String, Contact> prev;
+ 		ContactNode<String, Contact> prev = null;
 
  		// calling the hashvalue(str) to get a possible value
  		int possibleIndex = hashValue(str);
@@ -134,16 +134,21 @@ public class ContactList {
  			
  			while (current != null) 
  			{
- 				if (hashTable[possibleIndex].key == str) 
+ 				if (current.key.equals(str)) 
  				{
  					
- 					
- 			
- 					//to look for other contact Node should come first
- 					prev = current;
- 					
+ 					if(prev == null)
+ 					{
+ 						hashTable[possibleIndex] = current.next;
+ 					}
+ 					else
+ 					{
+ 						prev.next = current.next;
+ 					}
+ 						
  					//decrease numContacts in the LinkedList
  					numContacts--;
+ 					numContactNodes--;
  					
  					//look for the other contactNode with same object
  					
@@ -153,16 +158,21 @@ public class ContactList {
  						delete(current.contact.getName());
  						
  					}
+ 					else
+ 					{
+ 						delete(current.contact.getNumber());
+ 						
+ 					}
  					
  					return true;
  				} 
  				
+				//to look for other contact Node should come first
+				prev = current;
  				current = current.next;
  			}//endofwhile
 
  		}
- 		// update numContacts;
- 		numContacts--;
 
  		return false;
  	}
@@ -194,7 +204,7 @@ public class ContactList {
 
  			while (current != null) 
  			{
- 				if (hashTable[possibleIndex].key == str) 
+ 				if (current.key.equals(str)) 
  				{
 
  					return str + " is in contact list";
